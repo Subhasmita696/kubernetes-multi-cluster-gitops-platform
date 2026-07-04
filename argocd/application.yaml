@@ -1,18 +1,45 @@
-apiVersion: argoproj.io/v1alpha1
+# ArgoCD Application Definition
+# This tells ArgoCD where to find your app and how to deploy it
+#
+# ⚠️ IMPORTANT: You MUST update the repoURL below to YOUR GitHub repository!
+# Change: https://github.com/Subhasmita696/kubernetes-multi-cluster-gitops-platform
+# To:     https://github.com/YOUR-USERNAME/kubernetes-multi-cluster-gitops-platform
+#
+# 📝 Quick Guide:
+# 1. Fork this repository
+# 2. Update the repoURL to point to your fork
+# 3. Commit and push the change
+# 4. Apply: kubectl apply -f argocd/application.yaml
+
+apiVersion: argoproj.io/v1beta1
 kind: Application
 metadata:
-  name: nginx-app
+  name: nginx-app  # 👈 Name shown in ArgoCD UI - change to your app name
   namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io  # Ensures proper cleanup on deletion
 spec:
-  project: default
+  project: default  # ArgoCD project (default is fine for most use cases)
   source:
-    repoURL: https://github.com/YOUR_USERNAME/multi-cluster-gitops
-    targetRevision: HEAD
-    path: apps/nginx
+    # 👇 CHANGE THIS to your forked repository URL
+    repoURL: https://github.com/Subhasmita696/kubernetes-multi-cluster-gitops-platform
+    targetRevision: HEAD  # Git branch/tag (HEAD = main branch)
+    path: argocd/apps/nginx  # 👈 Folder containing your K8s manifests
   destination:
-    server: https://kubernetes.default.svc
-    namespace: default
+    server: https://kubernetes.default.svc  # Deploy to same cluster as ArgoCD
+    namespace: default  # 👈 Kubernetes namespace to deploy to
   syncPolicy:
     automated:
-      prune: true
-      selfHeal: true
+      prune: true  # Delete resources if removed from Git
+      selfHeal: true  # Auto-sync if cluster state differs from Git
+      allowEmpty: false  # Don't delete everything if folder is empty
+    syncOptions:
+      - CreateNamespace=true  # Auto-create namespace if it doesn't exist
+      - PrunePropagationPolicy=foreground  # Delete order: children first
+      - PruneLast=true  # Prune after all other resources are synced
+    retry:
+      limit: 5  # Retry failed syncs up to 5 times
+      backoff:
+        duration: 5s  # Initial retry delay
+        factor: 2  # Exponential backoff multiplier
+        maxDuration: 3m  # Maximum retry delay

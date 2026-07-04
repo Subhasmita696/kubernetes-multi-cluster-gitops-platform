@@ -1,11 +1,28 @@
+# Kubernetes Service - Exposes your application to the internet
+# 
+# 📝 To customize:
+# 1. Change "nginx-service" to your service name
+# 2. Update port numbers if your app uses different ports
+# 3. Change type to "ClusterIP" for internal-only access
+
 apiVersion: v1
 kind: Service
 metadata:
-  name: nginx-service
+  name: nginx-service  # 👈 Change this to your service name
+  labels:
+    app: nginx  # 👈 Match your app name
 spec:
-  type: LoadBalancer
+  type: LoadBalancer  # 👈 Creates AWS Load Balancer (public access)
+                      # Options: LoadBalancer, ClusterIP, NodePort
   selector:
-    app: nginx
+    app: nginx  # 👈 Must match deployment labels
   ports:
-    - port: 80
-      targetPort: 80
+    - name: http
+      port: 80  # 👈 External port (what users connect to)
+      targetPort: http  # 👈 Internal port (where your app listens)
+      protocol: TCP
+  # Sticky sessions - same client goes to same pod
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 10800  # 3 hours

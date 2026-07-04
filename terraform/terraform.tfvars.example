@@ -1,0 +1,29 @@
+# AWS Configuration
+# Replace with your actual values
+
+# AWS Region
+aws_region = "eu-north-1"
+
+# EKS Cluster Configuration
+cluster_name = "gitops-cluster"
+cluster_version = "1.31"
+
+# VPC Configuration - Replace with your actual subnet IDs
+subnet_ids = [
+  "subnet-xxxxxxxxxxxx",  # Private subnet 1
+  "subnet-yyyyyyyyyyyy"   # Private subnet 2
+]
+
+# Node Group Configuration
+node_instance_types = ["t3.medium"]
+node_desired_size   = 2
+node_min_size       = 1
+node_max_size       = 4
+
+# Tags
+tags = {
+  Environment = "production"
+  Project     = "kubernetes-multi-cluster-gitops"
+  ManagedBy   = "Terraform"
+  Owner       = "DevOps Team"
+}

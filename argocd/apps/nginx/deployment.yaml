@@ -1,19 +1,67 @@
+# Kubernetes Deployment for NGINX Application
+# This file defines how your application runs in Kubernetes
+# 
+# 📝 To customize for your app:
+# 1. Change "nginx" to your app name
+# 2. Update the image (line ~35) to your Docker image
+# 3. Adjust replicas, resources, and ports as needed
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx
+  name: nginx  # 👈 Change this to your app name
+  labels:
+    app: nginx  # 👈 Change this to match your app name
+    version: v1.27
 spec:
-  replicas: 2
+  replicas: 2  # 👈 Number of pods to run (2 = high availability)
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
   selector:
     matchLabels:
-      app: nginx
-  template:
-    metadata:
-      labels:
-        app: nginx
-    spec:
-      containers:
-      - name: nginx
-        image: nginx:latest
+      app: nginx  # 👈 Container name
+        image: nginx:1.27-alpine  # 👈 CHANGE THIS to your Docker image (e.g., myapp:v1.0)
+        imagePullPolicy: IfNotPresent  # Only pull if not present locally
         ports:
-        - containerPort: 80
+        - name: http
+          containerPort: 80  # 👈 Port your app listens on
+          protocol: TCP
+        resources:
+          # Minimum resources guaranteed to the pod
+          requests:
+            memory: "64Mi"  # 👈 Adjust based on your app needs
+            cpu: "100m"     # 100m = 0.1 CPU cores
+          # Maximum resources the pod can use
+          limits:
+            memory: "128Mi"  # 👈 Adjust based on your app needs
+            cpu: "200m"      # 200m = 0.2 CPU cores: 80
+          protocol: TCP
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "100m"
+          limits:
+            memory: "128Mi"
+            cpu: "200m"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /
+            port: http
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsNonRoot: true
+          runAsUser: 101
+          capabilities:
+            drop:
+              - ALL

@@ -1,0 +1,55 @@
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+*.tfvars
+!*.tfvars.example
+
+# Kubernetes
+*.kubeconfig
+kubeconfig
+*.key
+*.crt
+*.pem
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Secrets
+secrets/
+*.secret
+*.env
+.env.local
+
+# Logs
+*.log
+logs/
+
+# Helm
+charts/*.tgz
+.helmignore
+
+# ArgoCD
+argocd-*.yaml.tmp
+
+# Temporary files
+tmp/
+temp/
+*.tmp
