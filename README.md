@@ -1,7 +1,8 @@
 # 🚀 Kubernetes Multi-Cluster GitOps Platform
 
-> **Ready-to-use template for deploying applications to Kubernetes with GitOps!**  
-> Just fork, customize, and deploy. Perfect for learning or production use.
+Production-ready GitOps platform for deploying applications across multiple Kubernetes clusters using Terraform, ArgoCD, Helm, GitHub Actions, and AWS EKS.
+
+> Build once. Deploy everywhere.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Kubernetes](https://img.shields.io/badge/Kubernetes-1.31-blue.svg)](https://kubernetes.io/)
