@@ -118,33 +118,84 @@ A production-ready GitOps platform built using Kubernetes and ArgoCD to manage a
 
 ## ⚡ How It Works
 
-1. Developer pushes code to GitHub
-2. GitHub Actions builds multi-arch Docker images
-3. Images are pushed to GitHub Container Registry
-4. Manifests are updated with new image tags
-5. ArgoCD detects changes and syncs to Kubernetes clusters
-6. Applications are deployed with automated health checks
+```mermaid
+graph LR
+    A[👨‍💻 Developer] -->|git push| B[📦 GitHub Repository]
+    B -->|trigger| C[⚙️ GitHub Actions]
+    C -->|build| D[🐳 Docker Build]
+    D -->|push image| E[📦 GHCR]
+    E -->|pull image| F[🔄 ArgoCD]
+    F -->|deploy| G[🌱 Dev]
+    F -->|promote| H[🧪 Staging]
+    F -->|release| I[🚀 Production]
+    
+    style A fill:#e1f5ff
+    style B fill:#fff3cd
+    style C fill:#d4edda
+    style D fill:#cfe2ff
+    style E fill:#f8d7da
+    style F fill:#d1ecf1
+    style G fill:#d4edda
+    style H fill:#fff3cd
+    style I fill:#f8d7da
+```
 
-## 📊 Architecture
+### Deployment Pipeline
+
+1. **Developer** pushes code to GitHub repository
+2. **GitHub Actions** automatically triggers CI/CD pipeline
+3. **Docker Build** creates multi-architecture images (amd64/arm64)
+4. **GHCR** stores container images with security scanning
+5. **ArgoCD** detects manifest changes and syncs to clusters
+6. **Environments** receive deployments: Dev → Staging → Production
+
+## 📊 Architecture Diagram
 
 ```
-┌─────────────┐      ┌──────────────┐      ┌─────────────┐
-│   GitHub    │─────▶│ GitHub       │─────▶│   GHCR      │
-│ Repository  │      │ Actions      │      │  Registry   │
-└─────────────┘      └──────────────┘      └─────────────┘
-                            │                      │
-                            ▼                      ▼
-                     ┌──────────────┐      ┌─────────────┐
-                     │  Update      │      │  ArgoCD     │
-                     │  Manifests   │─────▶│  Sync       │
-                     └──────────────┘      └─────────────┘
-                                                  │
-                            ┌─────────────────────┼─────────────────────┐
-                            ▼                     ▼                     ▼
-                     ┌────────────┐       ┌────────────┐       ┌────────────┐
-                     │    Dev     │       │  Staging   │       │    Prod    │
-                     │  Cluster   │       │  Cluster   │       │  Cluster   │
-                     └────────────┘       └────────────┘       └────────────┘
+┌──────────────┐
+│   Developer  │ Commits code
+└──────┬───────┘
+       │
+       ▼
+┌──────────────────┐
+│     GitHub       │ Version control
+│   Repository     │
+└──────┬───────────┘
+       │
+       ▼
+┌──────────────────┐
+│  GitHub Actions  │ CI/CD automation
+│   • Build        │
+│   • Test         │
+│   • Scan         │
+└──────┬───────────┘
+       │
+       ▼
+┌──────────────────┐
+│   Docker Build   │ Container creation
+│   • Multi-arch   │
+│   • Optimized    │
+└──────┬───────────┘
+       │
+       ▼
+┌──────────────────┐
+│      GHCR        │ Container registry
+│  (GitHub CR)     │
+└──────┬───────────┘
+       │
+       ▼
+┌──────────────────┐
+│     ArgoCD       │ GitOps engine
+│   • Auto-sync    │
+│   • Self-healing │
+└──────┬───────────┘
+       │
+       ├─────────────┬─────────────┬─────────────┐
+       ▼             ▼             ▼             ▼
+┌───────────┐ ┌───────────┐ ┌───────────┐ ┌───────────┐
+│    Dev    │ │  Staging  │ │   Prod    │ │  Others   │
+│  Cluster  │ │  Cluster  │ │  Cluster  │ │  Clusters │
+└───────────┘ └───────────┘ └───────────┘ └───────────┘
 ```
 
 ## 🚀 Quick Start
