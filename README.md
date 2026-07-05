@@ -154,37 +154,10 @@ Use as a reference architecture for designing cloud-native platforms and GitOps 
 
 ## 🏛️ Architecture
 
-### High-Level Workflow
-
-```mermaid
-graph LR
-    A[👨‍💻 Developer] -->|git push| B[📦 GitHub Repository]
-    B -->|trigger| C[⚙️ GitHub Actions]
-    C -->|build| D[🐳 Docker Build]
-    D -->|push image| E[📦 GHCR]
-    E -->|pull image| F[🔄 ArgoCD]
-    F -->|deploy| G[🌱 Dev]
-    F -->|promote| H[🧪 Staging]
-    F -->|release| I[🚀 Production]
-    
-    style A fill:#e1f5ff
-    style B fill:#fff3cd
-    style C fill:#d4edda
-    style D fill:#cfe2ff
-    style E fill:#f8d7da
-    style F fill:#d1ecf1
-    style G fill:#d4edda
-    style H fill:#fff3cd
-    style I fill:#f8d7da
-```
-
-### Detailed Architecture
-
-```
 
 ![Enterprise GitOps CI/CD Architecture](images/gitops-cicd-architecture.png)
 
-```
+
 
 ### Component Responsibilities
 
