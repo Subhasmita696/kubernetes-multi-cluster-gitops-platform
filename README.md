@@ -381,8 +381,6 @@ You now have a production-ready GitOps platform running on AWS EKS!
 
 ## 📁 Project Structure
 
-## 📁 Project Structure
-
 ```
 kubernetes-multi-cluster-gitops-platform/
 │
