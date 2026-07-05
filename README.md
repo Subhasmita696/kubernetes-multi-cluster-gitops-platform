@@ -66,6 +66,8 @@ This template gives you:
 
 ### 🎁 What You Get
 
+![Enterprise GitOps CI/CD Architecture](images/gitops-cicd-architecture.png)
+
 ✅ **Complete Infrastructure** - Terraform code for AWS EKS with IAM roles  
 ✅ **GitOps Pipeline** - ArgoCD configured for automated deployments  
 ✅ **CI/CD Workflow** - GitHub Actions pipeline with security scanning  
