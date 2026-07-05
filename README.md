@@ -67,15 +67,7 @@ This template gives you:
 ### 🎁 What You Get
 
 ![What You'll Get](images/what-you-get-overview.png)
-
-✅ **Complete Infrastructure** - Terraform code for AWS EKS with IAM roles  
-✅ **GitOps Pipeline** - ArgoCD configured for automated deployments  
-✅ **CI/CD Workflow** - GitHub Actions pipeline with security scanning  
-✅ **Production Security** - Non-root containers, resource limits, vulnerability scanning  
-✅ **Auto-Scaling** - Horizontal Pod Autoscaler configured  
-✅ **Multi-Arch Support** - Builds for amd64 and arm64  
-✅ **Complete Documentation** - 2,344 lines of guides, examples, and troubleshooting  
-✅ **Beginner-Friendly** - Step-by-step instructions with inline comments  
+ 
 
 > **Think of this as a Kubernetes Platform Starter Kit** - just like `create-react-app` or `rails new`, but for cloud-native infrastructure.
 
