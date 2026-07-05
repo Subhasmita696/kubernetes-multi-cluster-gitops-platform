@@ -66,6 +66,8 @@ This template gives you:
 
 ### 🎁 What You Get
 
+![What You'll Get](images/what-you-get-overview.png)
+
 ✅ **Complete Infrastructure** - Terraform code for AWS EKS with IAM roles  
 ✅ **GitOps Pipeline** - ArgoCD configured for automated deployments  
 ✅ **CI/CD Workflow** - GitHub Actions pipeline with security scanning  
