@@ -66,8 +66,6 @@ This template gives you:
 
 ### 🎁 What You Get
 
-![Enterprise GitOps CI/CD Architecture](images/gitops-cicd-architecture.png)
-
 ✅ **Complete Infrastructure** - Terraform code for AWS EKS with IAM roles  
 ✅ **GitOps Pipeline** - ArgoCD configured for automated deployments  
 ✅ **CI/CD Workflow** - GitHub Actions pipeline with security scanning  
@@ -187,54 +185,9 @@ graph LR
 ### Detailed Architecture
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                       Developer                             │
-│              Commits code to GitHub                         │
-└────────────────────┬────────────────────────────────────────┘
-                     │
-                     ▼
-┌─────────────────────────────────────────────────────────────┐
-│                  GitHub Repository                          │
-│            Version Control & Source of Truth                │
-└────────────────────┬────────────────────────────────────────┘
-                     │
-                     ▼
-┌─────────────────────────────────────────────────────────────┐
-│                  GitHub Actions (CI/CD)                     │
-│  • Checkout code          • Run tests                       │
-│  • Build Docker image     • Scan for vulnerabilities        │
-│  • Multi-arch build       • Push to GHCR                    │
-└────────────────────┬────────────────────────────────────────┘
-                     │
-                     ▼
-┌─────────────────────────────────────────────────────────────┐
-│                Docker Build (Buildx v6)                     │
-│  • amd64 architecture     • Layer caching                   │
-│  • arm64 architecture     • Security scanning               │
-└────────────────────┬────────────────────────────────────────┘
-                     │
-                     ▼
-┌─────────────────────────────────────────────────────────────┐
-│            GitHub Container Registry (GHCR)                 │
-│         Stores versioned container images                   │
-└────────────────────┬────────────────────────────────────────┘
-                     │
-                     ▼
-┌─────────────────────────────────────────────────────────────┐
-│                    ArgoCD (GitOps)                          │
-│  • Monitors Git repository    • Self-healing                │
-│  • Detects manifest changes   • Auto-sync                   │
-│  • Pulls container images     • Health monitoring           │
-└────────────────────┬────────────────────────────────────────┘
-                     │
-     ┌───────────────┼───────────────┬───────────────┐
-     ▼               ▼               ▼               ▼
-┌──────────┐  ┌──────────┐  ┌──────────┐  ┌──────────┐
-│   Dev    │  │ Staging  │  │   Prod   │  │  Other   │
-│ Cluster  │  │ Cluster  │  │ Cluster  │  │ Clusters │
-│          │  │          │  │          │  │          │
-│ EKS 1.31 │  │ EKS 1.31 │  │ EKS 1.31 │  │ EKS 1.31 │
-└──────────┘  └──────────┘  └──────────┘  └──────────┘
+
+![Enterprise GitOps CI/CD Architecture](images/gitops-cicd-architecture.png)
+
 ```
 
 ### Component Responsibilities
