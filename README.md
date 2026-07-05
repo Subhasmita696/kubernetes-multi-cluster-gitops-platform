@@ -77,6 +77,8 @@ This template gives you:
 
 This template is designed for:
 
+![Who Is This For?](images/who-is-this-for.png)
+
 ### 🎓 Students & Beginners
 Learn Kubernetes, GitOps, and DevOps practices with a real-world project for your resume and portfolio.
 
