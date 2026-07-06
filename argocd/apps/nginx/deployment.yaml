@@ -23,7 +23,7 @@ spec:
   selector:
     matchLabels:
       app: nginx  # 👈 Container name
-        image: nginx:1.27-alpine  # 👈 CHANGE THIS to your Docker image (e.g., myapp:v1.0)
+        image: nginx:604c6848495860c5fd3e25f71b6636cd8e76418a
         imagePullPolicy: IfNotPresent  # Only pull if not present locally
         ports:
         - name: http
