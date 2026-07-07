@@ -536,30 +536,7 @@ argocd/apps/
 
 ### Automated CI/CD Workflow
 
-```mermaid
-graph TD
-    A[Developer Commits Code] --> B{Push to GitHub}
-    B --> C[GitHub Actions Triggered]
-    C --> D[Checkout Code]
-    D --> E[Build Docker Image]
-    E --> F[Run Security Scan - Trivy]
-    F --> G{Vulnerabilities?}
-    G -->|High/Critical| H[Fail Build]
-    G -->|None/Low| I[Push to GHCR]
-    I --> J[Update Manifest]
-    J --> K[ArgoCD Detects Change]
-    K --> L[Sync to Cluster]
-    L --> M[Health Check]
-    M --> N{Healthy?}
-    N -->|Yes| O[Deployment Success]
-    N -->|No| P[Auto Rollback]
-    
-    style A fill:#e1f5ff
-    style I fill:#d4edda
-    style O fill:#d4edda
-    style H fill:#f8d7da
-    style P fill:#f8d7da
-```
+![GitHub Actions GitOps Deployment Pipeline](images/github-actions-gitops-deployment-pipeline.png)
 
 ### Deployment Stages
 
@@ -769,32 +746,251 @@ aws cloudwatch put-metric-alarm \
 | **Permission denied** | IAM errors in Terraform | Check AWS user has AdministratorAccess or EKS permissions |
 | **Terraform apply fails** | Various resource creation errors | Check AWS service quotas and region availability |
 
-### Debug Commands
+## 🛠️ Debug & Troubleshooting Commands
+
+### ☸️ Kubernetes
 
 ```bash
-# Check cluster status
+# Cluster information
 kubectl cluster-info
-kubectl get nodes
+kubectl get nodes -o wide
+kubectl version
 
-# Check pod logs
-kubectl logs <pod-name>
-kubectl logs <pod-name> --previous  # Previous container logs
+# Namespace
+kubectl get namespaces
+kubectl get all -n <namespace>
 
-# Describe resources
+# Pods
+kubectl get pods -A
+kubectl get pods -o wide
 kubectl describe pod <pod-name>
-kubectl describe node <node-name>
+kubectl logs <pod-name>
+kubectl logs <pod-name> --previous
+kubectl logs -f <pod-name>
 
-# Check events
+# Deployment
+kubectl get deployments
+kubectl describe deployment <deployment-name>
+kubectl rollout status deployment/<deployment-name>
+kubectl rollout history deployment/<deployment-name>
+
+# Restart deployment
+kubectl rollout restart deployment/<deployment-name>
+
+# Services & Ingress
+kubectl get svc
+kubectl get ingress
+kubectl describe svc <service-name>
+kubectl describe ingress <ingress-name>
+
+# Events
 kubectl get events --sort-by='.lastTimestamp'
 
-# ArgoCD application status
-kubectl get applications -n argocd
+# Exec into pod
+kubectl exec -it <pod-name> -- /bin/bash
+```
+
+---
+
+### 🚀 ArgoCD
+
+```bash
+# Login
+argocd login <argocd-server>
+
+# List applications
+argocd app list
+
+# Get application details
 argocd app get <app-name>
 
-# Terraform debug
+# Sync application
+argocd app sync <app-name>
+
+# Check application health
+argocd app wait <app-name>
+
+# Application history
+argocd app history <app-name>
+
+# Rollback
+argocd app rollback <app-name>
+
+# Kubernetes
+kubectl get applications -n argocd
+kubectl logs deployment/argocd-server -n argocd
+```
+
+---
+
+### 🐳 Docker
+
+```bash
+# Running containers
+docker ps
+docker ps -a
+
+# Images
+docker images
+
+# Build
+docker build -t app .
+
+# Logs
+docker logs <container-id>
+
+# Execute shell
+docker exec -it <container-id> bash
+
+# Remove unused resources
+docker system prune -a
+```
+
+---
+
+### 🔒 Trivy Security Scan
+
+```bash
+# Scan Docker image
+trivy image <image-name>
+
+# Scan filesystem
+trivy fs .
+
+# Scan Kubernetes cluster
+trivy k8s cluster
+
+# Scan repository
+trivy repo .
+```
+
+---
+
+### 🏗️ Terraform
+
+```bash
+terraform init
+terraform validate
+terraform fmt
+
+terraform plan
 terraform plan -out=tfplan
+
 terraform show tfplan
+
+terraform apply
+
+terraform destroy
+
+# Debug mode
 TF_LOG=DEBUG terraform apply
+```
+
+---
+
+### ☁️ AWS CLI
+
+```bash
+# Current identity
+aws sts get-caller-identity
+
+# EKS
+aws eks list-clusters
+aws eks update-kubeconfig --name <cluster-name>
+
+# ECR
+aws ecr describe-repositories
+aws ecr list-images --repository-name <repository-name>
+
+# EC2
+aws ec2 describe-instances
+```
+
+---
+
+### ⚙️ GitHub Actions
+
+```bash
+# Git status
+git status
+
+# Branch
+git branch
+
+# Commit history
+git log --oneline
+
+# Latest commit
+git show
+
+# Remote
+git remote -v
+```
+
+---
+
+### 🌐 Networking
+
+```bash
+# DNS lookup
+nslookup google.com
+
+# Test connectivity
+ping google.com
+
+# HTTP request
+curl http://localhost:8080
+
+# HTTPS request
+curl https://example.com
+
+# Port check
+netstat -tulnp
+
+# Listening ports
+ss -tuln
+```
+
+---
+
+### 📊 Resource Monitoring
+
+```bash
+# Node resource usage
+kubectl top nodes
+
+# Pod resource usage
+kubectl top pods
+
+# Watch pods
+watch kubectl get pods
+
+# Watch deployments
+watch kubectl get deployments
+```
+
+---
+
+### 🚨 Common Troubleshooting
+
+```bash
+# ImagePullBackOff
+kubectl describe pod <pod-name>
+
+# CrashLoopBackOff
+kubectl logs <pod-name> --previous
+
+# Restart deployment
+kubectl rollout restart deployment/<deployment-name>
+
+# Delete pod
+kubectl delete pod <pod-name>
+
+# Force ArgoCD sync
+argocd app sync <app-name>
+
+# Check cluster events
+kubectl get events --sort-by='.lastTimestamp'
 ```
 
 ### Getting Help
@@ -1058,8 +1254,8 @@ This project is licensed under the **MIT License** - see the [LICENSE](LICENSE) 
 **Cloud & DevOps Engineer** passionate about building scalable, production-ready infrastructure and empowering others through open-source.
 
 - 🌐 **GitHub:** [@Subhasmita696](https://github.com/Subhasmita696)
-- 📧 **Email:** [subhasmita.das@example.com](mailto:subhasmita.das@example.com) *(replace with your email)*
-- 💼 **LinkedIn:** [linkedin.com/in/subhasmitadas](https://linkedin.com/in/subhasmitadas) *(replace with your profile)*
+- 📧 **Email:** [subhasmitadas696@gmail.com]
+- 💼 **LinkedIn:** [https://www.linkedin.com/in/subhasmita-das-a582b4171-devops/?skipRedirect=true]
 
 > *"Building tools that make cloud infrastructure accessible to everyone."*
 
