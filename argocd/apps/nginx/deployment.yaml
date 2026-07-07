@@ -23,7 +23,7 @@ spec:
   selector:
     matchLabels:
       app: nginx  # 👈 Container name
-        image: nginx:604c6848495860c5fd3e25f71b6636cd8e76418a
+        image: nginx:8f9e3079c6f9ed4557311817201e45db23bbe555
         imagePullPolicy: IfNotPresent  # Only pull if not present locally
         ports:
         - name: http
